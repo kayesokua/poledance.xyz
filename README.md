@@ -1,6 +1,6 @@
-# pd.analyzer 💃 🕺
+# poledance.xyz 💃 🕺
 
-pd.analyzer is a work-in-progress application designed to bring the power of data science and machine learning to the art of pole dancing. It aims to create a comprehensive framework for analyzing, summarizing, and enhancing pole dance performances using advanced computational techniques.
+poledance.xyz is a work-in-progress application designed to bring the power of data science and machine learning to the art of pole dancing. It aims to create a comprehensive framework for analyzing, summarizing, and enhancing pole dance performances using advanced computational techniques.
 
 ## Features
 
@@ -33,7 +33,7 @@ Route for downloading dataset: `http://127.0.0.1:5000/dataset`
 │   ├── processed # Data bucket for processed results
 │   └── uploads # Data bucket for raw video uploads
 │   ..prod.sqlite # Database for web activities and video metadeta
-├── migrations
+├── docs # For Documentation
 ├── requirements # Requirements
 ├── run.py
 ├── scripts # Standalone utility scripts
@@ -44,6 +44,9 @@ Route for downloading dataset: `http://127.0.0.1:5000/dataset`
 Python dependencies are listed in `requirements/`. They include Flask for web framework, OpenCV for image processing, and various machine learning libraries.
 
 ## Resources
-1. Project Template from [Miguel Grinberg's Flask Web Development, 2nd Edition](https://github.com/miguelgrinberg/flasky/)
-2. [MediaPipe | Google for Developers](https://github.com/google/mediapipe)
-3. [Plotly Python Graphing Library](https://plotly.com/python/)
+
+1. [MediaPipe | Google for Developers](https://github.com/google/mediapipe)
+2. [Plotly Python Graphing Library](https://plotly.com/python/)
+3. [Flask Framework](https://flask.palletsprojects.com/en/3.0.x/)
+4. [Pole Dance Fitness by Irina Kartaly](https://books.google.de/books/about/Pole_Dance_Fitness.html?id=Tr94DwAAQBAJ&source=kp_book_description&redir_esc=y)
+5. [Flask Development Tutorial by Miguel Grinberg's Flask Web Development, 2nd Edition](https://github.com/miguelgrinberg/flasky/)
