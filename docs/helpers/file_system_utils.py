@@ -1,4 +1,5 @@
 import os
+import re
 
 def create_annotated_directory(new_frames_path):
     annotated_dir = os.path.join(new_frames_path, 'annotated')
@@ -20,3 +21,15 @@ def parse_video_filename(image_file_path):
     second = int(parts[0])
     frame_no = int(parts[1].split('.')[0])
     return image_filename, second, frame_no
+
+def remove_filename_prefixes(source_dir, prefix_pattern):
+    for filename in os.listdir(source_dir):
+        if filename.lower().endswith('.png') and re.match(prefix_pattern, filename):
+            new_filename = re.sub(prefix_pattern, '', filename)
+            old_path = os.path.join(source_dir, filename)
+            new_path = os.path.join(source_dir, new_filename)
+            os.rename(old_path, new_path)
+            print(f"Renamed '{filename}' to '{new_filename}'")
+            
+# str_to_rmv = r'intermediate-\d+-'
+# remove_filename_prefixes('data/external/tricks/intermediate', str_to_rmv)
