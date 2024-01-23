@@ -82,3 +82,31 @@ def visualize_pose_dimension_angles(filepath, row, focus_angles):
     axs[1].axis('off')
 
     plt.show()
+
+def visualize_pose_coordinates(filepath, row, focus_landmarks):
+    fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+
+    colors = ['red', 'blue', 'green', 'purple', 'orange', 'magenta']
+    color_index = 0
+
+    axs[0].set_title("Landmark Scatter Visualization")
+
+    for label, (Lx, Ly) in focus_landmarks.items():
+        axs[0].scatter(Lx, Ly, color=colors[color_index])
+        axs[0].text(Lx + 0.1, Ly, f"{label}")
+        color_index = (color_index + 1) % len(colors)
+
+    axs[0].set_xlim(0, 1)
+    axs[0].set_ylim(0, 1)
+    axs[0].invert_yaxis()
+    axs[0].set_xticks(np.arange(0, 1.05, 0.1))
+    axs[0].set_yticks(np.arange(0, 1.05, 0.1))
+    axs[0].grid(True)
+
+    filename = filepath + row['image_filename']
+    img = Image.open(filename)
+    axs[1].imshow(img)
+    axs[1].set_title(f"Image with Landmark: {row['image_filename']}")
+    axs[1].axis('off')
+
+    plt.show()
