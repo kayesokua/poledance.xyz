@@ -47,9 +47,12 @@ venv
 __pycache__/
 drafted.ipynb
 
-*.png
+data/*.png
+data/*.pdf
+docs/data/*
+
 *.csv
-*.pdf
+
 *.docx
 docs/resources/*
 docs/drafted/*
