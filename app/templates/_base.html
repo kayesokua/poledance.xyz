@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Cover Template · Bootstrap v5.0</title>
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/cover/">
+
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/cover.css') }}" rel="stylesheet">
+</head>
+
+<body class="d-flex h-100 text-center text-black bg-light">
+
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+            <div>
+                <h3 class="float-md-start mb-0">poledance.xyz</h3>
+                <nav class="nav nav-masthead justify-content-center float-md-end">
+                    <a class="nav-link link-primary active" aria-current="page" href="{{ url_for('index') }}">Home</a>
+                    <a class="nav-link link-secondary" href="{{ url_for('accounts.register') }}">Register</a>
+                    <a class="nav-link link-secondary" href="{{ url_for('accounts.index') }}">Login</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="px-3">
+            
+            {% block content %}{% endblock %}
+            
+        </main>
+
+        <footer class="mt-auto text-primary-50">
+            <p><a href="#" class="text-primary">Capstone Project and Research</a>, by <a
+                    href="https://github.com/kayesokua" class="text-primary">@kayesokua</a>.</p>
+        </footer>
+    </div>
+
+
+
+</body>
+
+</html>

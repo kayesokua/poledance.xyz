@@ -1,0 +1,37 @@
+{% extends '_base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block content %}
+<!-- Spinner (hidden by default) -->
+<div id="loadingSpinner" style="display: none;">
+    <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span class="visually-hidden" role="status">Processing...</span>
+    </button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const form = document.querySelector('form');
+        const spinner = document.getElementById('loadingSpinner');
+
+        form.addEventListener('submit', () => {
+            // Show the spinner
+            spinner.style.display = 'block';
+        });
+    });
+</script>
+
+<div class="text-start">
+<h1>{{ title }}</h1>
+<form method="POST" action="/">
+    {{ wtf.quick_form(form) }}
+</form>
+<br>
+<p>Forgot your password? <a href="#">Click here to reset
+        it</a>.</p>
+<p>New user? <a href="#">Click here to register</a>.</p>
+
+</div>
+{% endblock %}

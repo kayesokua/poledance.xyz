@@ -65,3 +65,4 @@ draft.ipynb
 *.env
 *.gif
 
+instance/*
