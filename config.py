@@ -15,9 +15,13 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True
+    UPLOAD_FOLDER = 'data/uploads/'
+    FRAME_OUTPUT_FOLDER = 'data/processed/'
 
 class TestingConfig(Config):
     DEBUG = True
     TESTING = True
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI_TEST')
+    UPLOAD_FOLDER = 'data/uploads/'
+    FRAME_OUTPUT_FOLDER = 'data/processed/'

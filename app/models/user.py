@@ -4,6 +4,8 @@ from app import db
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+    
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     email = db.Column(db.String(64), unique=True, index=True)
