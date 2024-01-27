@@ -14,6 +14,8 @@ class VideoPost(db.Model):
     duration = db.Column(db.Float, default=0.0)
     filename = db.Column(db.String(256), nullable=False)
     
+    is_annotated = db.Column(db.Boolean, default=False)
+    
     deleted = db.Column(db.Boolean, default=False)
 
     created_on = db.Column(db.DateTime, index=True, default=datetime.utcnow)
