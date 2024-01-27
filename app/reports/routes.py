@@ -14,7 +14,7 @@ import pandas as pd
 import plotly
 import pytz
 
-bp = Blueprint("reports", __name__, url_prefix="/reports/")
+bp = Blueprint("reports", __name__, url_prefix="/reports")
 tz = pytz.timezone('UTC')
 
 @bp.route("/<id>/", methods=["GET", "POST"])
