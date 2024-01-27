@@ -1,7 +1,9 @@
 import pytest
+
+from unittest.mock import patch
+
 from app.extensions.db import db
 from app import create_app
-from config import TestingConfig
 from app.models import User
 import bcrypt
 
