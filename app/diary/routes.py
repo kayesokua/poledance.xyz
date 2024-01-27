@@ -6,7 +6,8 @@ from app.models.video import VideoPost
 from app.utilities.video_utils import *
 from app.utilities.file_system_utils import *
 
-from app.extensions.pose_landmarker import *
+from app.extensions.pose_landmarker import generate_pose_landmark_dictionary
+from app.services.pose_dimension_calculator import PoseDimensionCalculator
 
 from .forms import NewDancePost, EditDancePost
 
@@ -21,7 +22,7 @@ tz = pytz.timezone('UTC')
 @login_required
 def all_dance_entries():
     video_posts = VideoPost.query.filter_by(author_id=current_user.id).order_by(VideoPost.created_on.desc()).all()
-    return render_template("home.html", video_posts=video_posts, title="Diary Main")
+    return render_template("home.html", video_posts=video_posts, title="My Pole Diary")
 
 @bp.route("/new", methods=["GET", "POST"])
 @login_required
