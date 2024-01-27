@@ -26,10 +26,12 @@ def create_app():
     from app.api.routes import bp as api
     from app.accounts.routes import bp as accounts
     from app.diary.routes import bp as diary
+    from app.reports.routes import bp as reports
     
     app.register_blueprint(api)
     app.register_blueprint(accounts)
     app.register_blueprint(diary)
+    app.register_blueprint(reports)
     
     app.add_url_rule("/sign-in", endpoint='accounts.sign_in')
     app.add_url_rule("/sign-up", endpoint='accounts.sign_up')
