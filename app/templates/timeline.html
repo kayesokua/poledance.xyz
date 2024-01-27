@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+{% block content %}
+<h1>{{title}}</h1>
+
+<div style="overflow-y: scroll;">
+    <div id="fig_sample" style="width:1200px; height: 350px"></div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+    var fig_sample = {{ fig_sample | safe }};
+    Plotly.newPlot('fig_sample', fig_sample.data, fig_sample.layout);
+</script>
+{% endblock %}

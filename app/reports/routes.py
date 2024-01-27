@@ -12,6 +12,7 @@ import os
 import json
 import pandas as pd
 import plotly
+import plotly.express as px
 import pytz
 
 bp = Blueprint("reports", __name__, url_prefix="/reports")
@@ -71,3 +72,17 @@ def view_dance_report(id):
                            fig_grip_hbar=fig_grip_hbar,
                            fig_tricks_hbar=fig_tricks_hbar,
     )
+
+@bp.route("/<id>/timeline", methods=["GET", "POST"])
+@login_required
+def view_dance_report_timeline(id):
+    video_post = VideoPost.query.get_or_404(id)
+    df = pd.DataFrame([
+        dict(Task="Body Position", Start='2024-01-27 00:00:00', Finish='2024-01-27 00:00:05', Resource="Upright"),
+        dict(Task="Body Position", Start='2024-01-27 00:00:10', Finish='2024-01-27 00:00:15', Resource="Upright"),
+        dict(Task="Body Position", Start='2024-01-27 00:00:20', Finish='2024-01-27 00:00:25', Resource="Inversion"),
+        dict(Task="Body Position", Start='2024-01-27 00:00:25', Finish='2024-01-27 00:00:30', Resource="Horizontal")
+    ])
+    fig_timeline = px.timeline(df, x_start="Start", x_end="Finish", y="Resource", color="Resource")
+    fig_sample = json.dumps(fig_timeline, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template("timeline.html", title="Sample Threaded", fig_sample=fig_sample)
