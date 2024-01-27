@@ -25,12 +25,17 @@
 
 <div class="text-start">
     <h1>{{ title }}</h1>
-    <form method="POST" action="{{ request.url }}">
+    <form method="POST" action="{{ request.url }}" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         {{ wtf.quick_form(form) }}
     </form>
     <br>
-    <p>Forgot your password? <a href="#">Click here to reset it</a>.</p>
+
+    {% if request.endpoint == 'accounts.sign_in' %}
+    <p>Already have an account? <a href="{{ url_for('accounts.sign_in') }}">Click here to log in</a>.</p>
+    {% elif request.endpoint == 'accounts.sign_up' %}
     <p>New user? <a href="{{ url_for('accounts.sign_up') }}">Click here to register</a>.</p>
+    {% endif %}
+    
 </div>
 {% endblock %}
