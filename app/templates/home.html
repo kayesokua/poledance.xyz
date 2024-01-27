@@ -19,6 +19,7 @@
             <p class="card-text mb-auto">Deleted? {{ post.deleted }}</p>
             <p class="card-text mb-auto">Annotated? {{ post.is_annotated }}</p>
             <a href="{{ url_for('diary.update_dance_entry', id=post.id) }}">View Details</a>
+            <a href="{{ url_for('reports.view_dance_report', id=post.id) }}">View Report</a>
           </div>
 
 

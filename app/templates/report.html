@@ -1,0 +1,83 @@
+{% extends '_base.html' %}
+{% block content %}
+<h2 class="mt-5 text-start">{{ title }}</h2>
+<p class="lead text-start mb-3">{{ video_post.description }}</p>
+
+<p>{{spin_count }} spins | {{ invert_count }} inversions | See Timeline</p>
+<hr class="py-3" />
+
+<div class="col-md-12">
+    <p class="lead text-center">Body Positions</p>
+    <div class="border">
+        <div id="fig_body_hbar"></div>
+        <script>
+            var fig_body_hbar = {{ fig_body_hbar | safe }};
+            Plotly.newPlot('fig_body_hbar', fig_body_hbar);
+        </script>
+    </div>
+</div>
+<hr class="py-3" />
+
+<div class="col-md-12">
+    <p class="lead text-center">Leg Positions</p>
+    <div class="border">
+      <div id="fig_legs_hbar"></div>
+      <script>
+        var fig_legs_hbar = {{ fig_legs_hbar | safe }};
+        Plotly.newPlot('fig_legs_hbar', fig_legs_hbar);
+      </script>
+    </div>
+  </div>
+  <hr class="py-3" />
+
+  <div class="col-md-12">
+    <p class="lead text-center">Grip Positions</p>
+    <div class="border">
+      <div id="fig_grip_hbar"></div>
+      <script>
+        var fig_grip_hbar = {{ fig_grip_hbar | safe }};
+        Plotly.newPlot('fig_grip_hbar', fig_grip_hbar);
+      </script>
+    </div>
+  </div>
+  <hr class="py-3" />
+
+  <div class="col-md-12">
+    <p class="lead text-center">Tricks</p>
+    <div class="border">
+      <div id="fig_tricks_hbar"></div>
+      <script>
+        var fig_tricks_hbar = {{ fig_tricks_hbar | safe }};
+        Plotly.newPlot('fig_tricks_hbar', fig_tricks_hbar);
+      </script>
+    </div>
+  </div>
+  <hr class="py-3" />
+
+<p class="lead text-start">🍣 Your Raw Data | <a href="#">Export to csv</a></p>
+<div class="col-md-12 border my-3">
+    <div class="table-responsive small" style="max-height:200px; overflow-y: scroll;">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    {% if pd_data %}
+                    {% for key in pd_data[0] %}
+                    <th>{{ key }}</th>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in pd_data %}
+                <tr>
+
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% endblock %}
