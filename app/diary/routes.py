@@ -5,6 +5,9 @@ from app.extensions.db import db
 from app.models.video import VideoPost
 from app.utilities.video_utils import *
 from app.utilities.file_system_utils import *
+
+from app.extensions.pose_landmarker import *
+
 from .forms import NewDancePost, EditDancePost
 
 import pytz
@@ -42,7 +45,6 @@ def new_dance_entry():
         if is_video_openable(video_path):
             fps, frame_interval, duration = get_video_properties(video_path)
             
-            
             processed_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], current_user.id, file_uuid)
             create_file_directory(processed_dir)
                         
@@ -60,7 +62,17 @@ def new_dance_entry():
             db.session.add(video_post)
             db.session.commit()
             flash(f"Processed {image_count} frames from the video.")
-            return redirect(url_for('diary.new_dance_entry'))
+            
+            landmarked_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], current_user.id, file_uuid)
+            model_path = current_app.config['MODEL_PATH']
+            is_annotated = generate_pose_landmark_dictionary(landmarked_dir, model_path, is_video=True)
+
+            if is_annotated:
+                video_post.is_annotated = True
+                db.session.add(video_post)
+                db.session.commit()
+            
+            return redirect(url_for('diary.all_dance_entries'))
         else:
             flash(f"Something went wrong. :( Please try again. ")
             return redirect(url_for('accounts.profile'))
