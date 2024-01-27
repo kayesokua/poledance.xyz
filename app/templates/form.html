@@ -24,14 +24,13 @@
 </script>
 
 <div class="text-start">
-<h1>{{ title }}</h1>
-<form method="POST" action="/">
-    {{ wtf.quick_form(form) }}
-</form>
-<br>
-<p>Forgot your password? <a href="#">Click here to reset
-        it</a>.</p>
-<p>New user? <a href="#">Click here to register</a>.</p>
-
+    <h1>{{ title }}</h1>
+    <form method="POST" action="{{ request.url }}">
+        {{ form.hidden_tag() }}
+        {{ wtf.quick_form(form) }}
+    </form>
+    <br>
+    <p>Forgot your password? <a href="#">Click here to reset it</a>.</p>
+    <p>New user? <a href="{{ url_for('accounts.sign_up') }}">Click here to register</a>.</p>
 </div>
 {% endblock %}

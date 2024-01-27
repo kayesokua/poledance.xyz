@@ -1,0 +1,10 @@
+{% extends '_base.html' %}
+{% block content %}
+<h1>Welcome back! {{ current_user.username }}</h1>
+<p class="lead">
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+</p>
+<p class="lead">
+    <a href="{{ url_for('accounts.sign_out') }}" class="btn btn-lg btn-secondary fw-bold text-white bg-dark">Sign Out</a>
+</p>
+{% endblock %}
