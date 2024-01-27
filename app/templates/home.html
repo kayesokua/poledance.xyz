@@ -1,0 +1,47 @@
+{% extends '_base.html' %}
+{% block content %}
+<h1>Welcome back! {{ current_user.username }}</h1>
+<p class="lead">
+  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+  <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-primary fw-bold text-white">Upload New
+    Dance</a>
+</p>
+
+<div class="row mb-2">
+  {% for post in video_posts %}
+  <div class="col-md-12 mb-3">
+    <div class="card">
+      <div class="row text-start">
+        <div class="col-8">
+          <div class="">
+            <h6>{{ post.title }}</h6>
+            <p class="card-text mb-auto">{{ post.description }}</p>
+            <p class="card-text mb-auto">Visible: {{ post.deleted }}</p>
+            <a href="{{ url_for('diary.update_dance_entry', id=post.id) }}">View Details</a>
+          </div>
+
+
+
+        </div>
+        <div class="col-4">
+          <video controls class="img-fluid" style="padding:1em;">
+            <source src="{{ url_for('api.serve_uploaded_video', id=post.id, author_id=post.author_id ) }}"
+              type="video/mp4">
+            " type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-md-12">
+    <p>No dance entries found.</p>
+  </div>
+  {% endfor %}
+
+
+
+</div>
+
+{% endblock %}
