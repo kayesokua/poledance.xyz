@@ -15,6 +15,7 @@ class VideoPost(db.Model):
     filename = db.Column(db.String(256), nullable=False)
     
     is_annotated = db.Column(db.Boolean, default=False)
+    is_calculated = db.Column(db.Boolean, default=False)
     
     deleted = db.Column(db.Boolean, default=False)
 
