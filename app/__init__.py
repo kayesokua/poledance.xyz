@@ -1,4 +1,6 @@
-from flask import Flask,render_template
+from flask import Flask, render_template, redirect, url_for, request, session, flash, abort
+from flask_login import LoginManager
+
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 
@@ -21,8 +23,16 @@ def create_app():
     from app.accounts.routes import bp as accounts
     app.register_blueprint(accounts)
     
-    app.add_url_rule("/login", endpoint='accounts.index')
-    app.add_url_rule("/register", endpoint='accounts.register')
+    app.add_url_rule("/sign-in", endpoint='accounts.sign_in')
+    app.add_url_rule("/sign-up", endpoint='accounts.sign_up')
+    
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'accounts.sign_in'
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
     
     @app.route("/")
     def index():

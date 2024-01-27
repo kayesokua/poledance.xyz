@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     
-    activated = db.Column(db.Boolean, default=False)
+    activated = db.Column(db.Boolean, default=True)
     activated_on = db.Column(db.DateTime(), default=datetime.utcnow)
     
     deactivated = db.Column(db.Boolean, default=False)
