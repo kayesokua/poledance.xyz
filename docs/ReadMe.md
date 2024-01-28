@@ -2,6 +2,9 @@
 
 This section is the documentation for class implementations of key services in poledance.xyz 
 
+![What is poledancexyz about](images/poledancexyz_cover.png)
+
+
 ## Video Data Processing
 
 The data flow diagram below illustrates our method for handling and analyzing video data. The process is designed to accommodate the temporal aspects of video imagery, allowing for a detailed examination over time.
