@@ -1,6 +1,8 @@
 # poledance.xyz 💃 🕺
 
-poledance.xyz is a pole diary app.
+poledance.xyz is a pole diary app.. that lets you visualize pose data into insights!
+
+![What is poledancexyz about](docs/images/poledancexyz_cover.png)
 
 ## Features
 
