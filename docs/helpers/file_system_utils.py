@@ -30,6 +30,3 @@ def remove_filename_prefixes(source_dir, prefix_pattern):
             new_path = os.path.join(source_dir, new_filename)
             os.rename(old_path, new_path)
             print(f"Renamed '{filename}' to '{new_filename}'")
-            
-# str_to_rmv = r'intermediate-\d+-'
-# remove_filename_prefixes('data/external/tricks/intermediate', str_to_rmv)

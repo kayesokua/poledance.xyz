@@ -2,30 +2,56 @@
 {% block content %}
 <h1 class="text-start">{{ title }}</h1>
 
-<div class="col-md-12 border my-3">
-    <div class="table-responsive small" style="max-height:200px; overflow-y: scroll;">
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    {% if dict_data %}
-                    {% for key in dict_data[0] %}
-                    <th>{{ key }}</th>
-                    {% endfor %}
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in dict_data %}
-                <tr>
+<div class="col-md-12 my-3">
 
-                    {% for value in row.values() %}
-                    <td>{{ value }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    
+    <form method="GET" action="{{ url_for('dictionary.pose_search') }}">
 
-{% endblock %}
+        <div class="row g-3 align-items-center">
+
+            <div class="col-8">
+                <input class="form-control form-control-lg" type="search" list="datalistOptions" name="q"
+                    id="PoseSearch" placeholder="Type to search...">
+                <datalist id="datalistOptions">
+                    {% for pose_name in pose_names %}
+                    <option value="{{ pose_name }}">
+
+                    </option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-lg w-100 btn-primary">Search</button>
+
+            </div>
+        </div>
+
+
+
+    </form>
+</div>
+<div class="col-md-12 my-3">
+    {% if results %}
+
+    <ol class="list-group list-group-numbered">
+        {% for row in results %}
+        <li class="list-group-item d-flex">
+            <div class="col-8 text-start">
+                <div class="fw-bold mb-2" style="padding-left:1em">
+                    <a href="{{ url_for('dictionary.pose_detail_page', pose_name=row['pose_name']) }}" class="link-primary">
+                        {{row['pose_name'] }}</a>
+                </div>
+                <p style="padding-left:1em">
+                    <a href="{{ url_for('dictionary.pose_detail_contact_points', pose_name=row['pose_name']) }}"  class="btn btn-sm btn-outline-secondary ">View Contact Points</a>
+                    <a href="{{ url_for('dictionary.pose_detail_page', pose_name=row['pose_name']) }}" class="btn btn-sm btn-outline-secondary ">View Pose Shape</a></p>
+            </div>
+            <div class="col-4 text-end">
+                <img src="{{ url_for('static', filename='dictionary/tricks/' ~ row['image_filename']) }}"
+                    class="img-fluid" style="max-height:75px;" />
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+
+    {% endif %}
+
+</div> {% endblock %}

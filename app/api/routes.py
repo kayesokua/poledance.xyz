@@ -41,4 +41,4 @@ def serve_static_dictionary_tricks(category):
     else:
         return redirect(url_for('diary.all_dance_entries'))
         
-    return render_template("dictionary.html", dict_data=dict_data, title=title)
+    return dict_data
