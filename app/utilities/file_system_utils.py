@@ -35,3 +35,8 @@ def remove_filename_prefixes(source_dir, prefix_pattern):
             new_path = os.path.join(source_dir, new_filename)
             os.rename(old_path, new_path)
             print(f"Renamed '{filename}' to '{new_filename}'")
+            
+def clean_pose_name(name):
+    name = re.sub(r'-(lft|rgt|lft-inv|rgt-inv)$', '', name)  # Remove specific suffixes
+    name = name.replace('-', ' ')  # Replace hyphens with spaces
+    return name
