@@ -38,12 +38,9 @@ def process_pose_data(source_path, save_path, video_post, tricks, ref_body, ref_
         pd_results.to_csv(save_path, index=False)
         video_post.is_calculated = True
 
-        top_tricks = pd_results['pos_trick'].value_counts().nlargest(
-            3).index.tolist()
-        top_legs = pd_results['pos_legs'].value_counts().nlargest(
-            3).index.tolist()
-        top_grip = pd_results['pos_grip'].value_counts().nlargest(
-            3).index.tolist()
+        top_tricks = pd_results[pd_results['pos_trick'] != 'undefined']['pos_trick'].value_counts().nlargest(3).index.tolist()
+        top_legs = pd_results[pd_results['pos_legs'] != 'undefined']['pos_legs'].value_counts().nlargest(3).index.tolist()
+        top_grip = pd_results[pd_results['pos_grip'] != 'undefined']['pos_grip'].value_counts().nlargest(3).index.tolist()
 
         new_report = VideoReport(
             author_id=video_post.author_id,
@@ -145,7 +142,7 @@ def vis_animation(id):
     pd_filepath = os.path.join(
         current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data.csv')
     data = pd.read_csv(pd_filepath)
-    fig = plotly_dynamic_pose_figure(data, right_arm=True,left_arm=True)
+    fig = plotly_dynamic_pose_figure(data, right_arm=True,left_arm=True, right_leg=True, left_leg=True)
     fig_render = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template("reports/simple_plot.html",
