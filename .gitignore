@@ -72,3 +72,5 @@ app/data/processed/*
 
 app/static/dictionary/tricks/*
 app/static/dictionary/positions/*
+
+migrations
