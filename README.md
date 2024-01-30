@@ -1,4 +1,4 @@
-# poledance.xyz 💃 🕺
+# poledance.xyz | Translating 💃 XYZ like 🔤
 
 Poledance.xyz is an online platform designed for managing solo choreography in the field of pole fitness. It employs a data science framework to distill complex movements into simplified terms and generate reports that systematically codify a dance. The beta version features:
 
@@ -14,11 +14,17 @@ Key achievements:
 
 ## Features
 
+### Pose Dictionary 
+
 ![Pole Dictionary](docs/images/feature-dictionary.png)
+
+![Pose Classification](docs/images/feature-pose-detection.png)
+
+### Personalized and Aggregated Reports
 
 ![Personalized and Aggregated Reports](docs/images/feature-reports.png)
 
-![Pose Classification](docs/images/feature-pose-detection.png)
+### Plot and Figure Aesthetics
 
 ![Plot and Figure Aesthetics](docs/images/feature-figure-aesthetics.png)
 
