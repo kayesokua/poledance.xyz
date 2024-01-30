@@ -30,4 +30,5 @@ def generate_timeline_image(annotated_dir, data):
 
     plt.tight_layout()
     plt.savefig(f'{annotated_dir}/timeline.png', dpi=150)
+    plt.close(fig)
     return True

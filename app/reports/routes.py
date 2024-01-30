@@ -75,8 +75,12 @@ def overview(id):
         pd_savepath = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data.csv')
         pd_results = process_pose_data(pd_filepath, pd_savepath, video_post, tricks, ref_body, ref_legs, ref_grip)        
         annotated_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'annotated')
-        generate_timeline_image(annotated_dir, pd_results)
+        generate_timeline_image(annotated_dir, pd_results)        
+        timeline_image = generate_timeline_image(annotated_dir, pd_results)
         
+        if timeline_image:
+            print("timeline image generated")
+            
         if pd_results is None:
             flash("Something went wrong")
             return redirect(url_for('diary.all_dance_entries'))
