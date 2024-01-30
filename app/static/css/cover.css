@@ -46,7 +46,7 @@ body::before {
 
 .nav-masthead .nav-link:hover,
 .nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, .25);
+  border-bottom-color: var(--bs-primary);
 }
 
 .nav-masthead .nav-link + .nav-link {

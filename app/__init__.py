@@ -19,7 +19,7 @@ def create_app():
 
 
     with app.app_context():
-        from app.models import User, VideoPost
+        from app.models import User, VideoPost, VideoReport
         db.create_all()
         migrate.init_app(app, db, compare_type=True)
     

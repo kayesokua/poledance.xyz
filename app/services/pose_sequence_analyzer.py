@@ -8,9 +8,8 @@ class PoseSequenceAnalyzer:
         self.ref_tricks = ref_tricks
         self.trick_match_count = 0
         self.trick_undefined_count = 0
-        
         self.spin_count = self.get_total_spin_count()
-        self.invert_count = self.get_total_inversions()
+        self.inversion_count = self.get_total_inversions()
         self.data['pos_trick'] = self.data.apply(self.get_pole_trick, axis=1)
         
     def get_total_spin_count(self):

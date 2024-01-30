@@ -5,6 +5,7 @@ from app.models.user import User
 from .forms import SignInForm, SignUpForm
 import pytz
 import bcrypt
+from datetime import datetime
 
 bp = Blueprint("accounts", __name__, url_prefix="/accounts")
 tz = pytz.timezone('UTC')
@@ -29,6 +30,8 @@ def sign_in():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password_hash.encode('utf-8')):
+            user.last_login_on = tz.localize(datetime.utcnow())
+            db.session.commit()
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('accounts.profile'))
         else:
@@ -44,7 +47,6 @@ def sign_up():
 
     if form.validate_on_submit():
         user = User.query.filter((User.username == form.username.data) | (User.email == form.email.data)).first()
-        print("validated")
         if user:
             flash('Username or email already exists', 'error')
             return render_template("form.html", form=form, title="Sign Up")

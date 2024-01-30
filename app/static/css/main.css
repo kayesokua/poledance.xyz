@@ -97,7 +97,7 @@
     --bs-link-color: #ef3d9f;
     --bs-link-color-rgb: 13, 110, 253;
     --bs-link-decoration: underline;
-    --bs-link-hover-color: #0a58ca;
+    --bs-link-hover-color: #ff0094;
     --bs-link-hover-color-rgb: 10, 88, 202;
     --bs-code-color: #d63384;
     --bs-highlight-color: #212529;
@@ -7812,9 +7812,9 @@ fieldset:disabled .btn {
 
 .link-primary:focus,
 .link-primary:hover {
-    color: RGBA(10, 88, 202, var(--bs-link-opacity, 1)) !important;
-    -webkit-text-decoration-color: RGBA(10, 88, 202, var(--bs-link-underline-opacity, 1)) !important;
-    text-decoration-color: RGBA(10, 88, 202, var(--bs-link-underline-opacity, 1)) !important
+    color: RGBA(250,0,148, var(--bs-link-opacity, 1)) !important;
+    -webkit-text-decoration-color: RGBA(var(--bs-primary-rgb), var(--bs-link-underline-opacity, 1)) !important;
+    text-decoration-color: RGBA(var(--bs-primary-rgb), var(--bs-link-underline-opacity, 1)) !important
 }
 
 .link-secondary {
