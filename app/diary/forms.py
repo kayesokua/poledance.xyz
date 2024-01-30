@@ -8,12 +8,16 @@ from wtforms.validators import DataRequired, Length
 
 class NewDancePost(FlaskForm):
     title = StringField('Title', validators=[Length(max=128)])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description')
+    instruction = TextAreaField('Instruction')
+    ai_instruction = BooleanField('Generate Instructions?', render_kw={"disabled": True})
     filename = FileField('Upload Video', validators=[FileRequired(), FileAllowed(['mp4'], 'MP4 videos only!')])
     submit = SubmitField('Submit')
 
 class EditDancePost(FlaskForm):
     title = StringField('Title', validators=[Length(max=128)])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    deleted = BooleanField('Delete Post?',validators=[DataRequired()])
+    description = TextAreaField('Description')
+    instruction = TextAreaField('Instruction')
+    ai_instruction = BooleanField('Generate Instructions?', render_kw={"disabled": True})
+    deleted = BooleanField('Delete Post?')
     submit = SubmitField('Submit')
