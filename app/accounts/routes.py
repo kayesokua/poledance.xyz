@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for, session,
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
 from app import db
 from app.models.user import User
-from .forms import SignInForm, SignUpForm
+from .forms import SignInForm, SignUpForm, EditAccountForm
 import pytz
 import bcrypt
 from datetime import datetime
@@ -79,5 +79,29 @@ def sign_out():
 @bp.route("/profile", methods=["GET", "POST"], endpoint="profile")
 @login_required
 def profile():
-    return render_template("profile.html", title="Profile")
+    form = EditAccountForm()
+    user = current_user
+    if request.method == 'GET':
+        form.deactivation.data = user.deleted
 
+    if form.validate_on_submit():
+        user = current_user
+        
+        if form.deactivation.data:
+            if not user.deleted or datetime.utcnow() < user.scheduled_for_deletion_on:
+                user.delete_user() 
+        else:
+            if user.deleted and datetime.utcnow() < user.scheduled_for_deletion_on:
+                user.deleted = False
+                user.deleted_on = None
+                user.scheduled_for_deletion_on = None
+        
+        if form.password.data and form.password.data == form.password2.data:
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt).decode('utf-8')
+            user.password_hash = hashed_password
+        db.session.commit()
+        flash('Your account has been updated', 'success')
+        return redirect(url_for('accounts.profile'))
+
+    return render_template("form.html", form=form, title="Edit Account")

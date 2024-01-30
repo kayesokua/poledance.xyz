@@ -27,3 +27,9 @@ class SignUpForm(FlaskForm):
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Register')
+    
+class EditAccountForm(FlaskForm):
+    password = PasswordField('Password (Optional)', validators=[EqualTo('password2', message='Passwords must match.')])
+    password2 = PasswordField('Confirm password (Optional)', validators=[EqualTo('password', message='Passwords must match.')])
+    deactivation = BooleanField('Delete Account? You will lose access after 7 days and all your data will be deleted in 14 days.')
+    submit = SubmitField('Update Details')
