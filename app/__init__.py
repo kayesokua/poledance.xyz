@@ -16,12 +16,13 @@ def create_app():
     csrf = CSRFProtect(app)
     bootstrap = Bootstrap(app)
     moment = Moment(app)
-
+    
 
     with app.app_context():
         from app.models import User, VideoPost, VideoReport
         db.create_all()
-        migrate.init_app(app, db, compare_type=True)
+        migrate.init_app(app, db, render_as_batch=True)
+
     
     from app.api.routes import bp as api
     from app.accounts.routes import bp as accounts

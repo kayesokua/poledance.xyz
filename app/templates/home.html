@@ -9,7 +9,7 @@
       <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-sm btn-info fw-bold text-white">
         {% include 'icons/upload.html' %} Upload New</a>
       {% if video_posts %}
-      <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-sm btn-primary fw-bold text-white">
+      <a href="{{ url_for('diary.all_dance_summary') }}" class="btn btn-sm btn-primary fw-bold text-white">
         {% include 'icons/barchart.html' %} Dance Summary </a>
       {% endif %}
     </p>
@@ -46,7 +46,7 @@
         
 
         <p class="card-text text-white text-start"><small>{{ post.created_on.strftime('%B %d, %Y') }} | {{ post.duration
-            | round }}s</small></p>
+            | round(2) }}s</small></p>
 
         <p class="text-start">
           <a href="{{ url_for('diary.update_dance_entry', id=post.id) }}" class="btn btn-sm btn-light">

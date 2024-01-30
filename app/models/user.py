@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from app import db
 from datetime import datetime, timedelta
+from .video import VideoPost
 import uuid
 
 class User(db.Model, UserMixin):
@@ -22,6 +23,9 @@ class User(db.Model, UserMixin):
     def delete_user(self):
         self.deleted = True
         self.deleted_on = datetime.utcnow()
-        self.scheduled_for_deletion_on = datetime.utcnow() + timedelta(days=14)
+        self.scheduled_for_deletion_on = datetime.utcnow() + timedelta(days=7)
+        video_posts = VideoPost.query.filter_by(author_id=self.id).all()
+        for video_post in video_posts:
+            video_post.delete_post()
         db.session.add(self)
-        db.session.commit()
+        db.session.commit() 

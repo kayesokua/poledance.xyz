@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from app.extensions.db import db
 from app.extensions.pose_landmarker import generate_pose_landmark_dictionary
-from app.models.video import VideoPost
+from app.models import VideoPost, VideoReport
 from app.utilities.video_utils import *
 from app.utilities.file_system_utils import *
 
@@ -21,8 +21,14 @@ tz = pytz.timezone('UTC')
 @login_required
 def all_dance_entries():
     video_posts = VideoPost.query.filter_by(author_id=current_user.id, deleted=False).order_by(VideoPost.created_on.desc()).all()
-    
     return render_template("home.html", video_posts=video_posts, title="My Pole Diary")
+
+@bp.route("/summary", methods=["GET"])
+@login_required
+def all_dance_summary():
+    video_posts = VideoPost.query.filter_by(author_id=current_user.id, deleted=False).order_by(VideoPost.created_on.desc()).all()
+    video_reports = VideoReport.query.filter_by(author_id=current_user.id, deleted=False).order_by(VideoReport.created_on.desc()).all()
+    return render_template("summary.html", video_posts=video_posts, video_reports=video_reports, title="My Pole Diary")
 
 @bp.route("/new", methods=["GET", "POST"])
 @login_required
