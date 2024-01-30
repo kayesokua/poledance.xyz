@@ -25,7 +25,7 @@ def unauthorized():
 def sign_in():
     form = SignInForm()
     if current_user.is_authenticated:
-        return redirect(url_for('accounts.profile'))
+        return redirect(url_for('diary.all_dance_entries'))
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()

@@ -3,15 +3,21 @@ from flask_login import login_required, current_user
 
 from app.extensions.db import db
 from app.extensions.pose_landmarker import generate_pose_landmark_dictionary
+from app.extensions.plotly_rom_arc import plot_range_of_motion_arc
 from app.models import VideoPost, VideoReport
 from app.utilities.video_utils import *
 from app.utilities.file_system_utils import *
 
 from .forms import NewDancePost, EditDancePost
 
-import pytz
 from datetime import datetime
+import json
+import plotly
+import plotly.express as px
+import pandas as pd
+import pytz
 import uuid
+import numpy as np
 from werkzeug.utils import secure_filename
 
 bp = Blueprint("diary", __name__, url_prefix="/diary")
@@ -26,9 +32,78 @@ def all_dance_entries():
 @bp.route("/summary", methods=["GET"])
 @login_required
 def all_dance_summary():
-    video_posts = VideoPost.query.filter_by(author_id=current_user.id, deleted=False).order_by(VideoPost.created_on.desc()).all()
+    video_posts = VideoPost.query.filter_by(author_id=current_user.id, deleted=False, is_calculated=True).order_by(VideoPost.created_on.desc()).all()
     video_reports = VideoReport.query.filter_by(author_id=current_user.id, deleted=False).order_by(VideoReport.created_on.desc()).all()
-    return render_template("summary.html", video_posts=video_posts, video_reports=video_reports, title="My Pole Diary")
+    pos_body_counts = pd.Series(dtype=int)
+    total_tricks = 0
+    total_spins = 0
+    total_inversions = 0
+    tricks_frequency = {}
+    total_duration = 0.0
+    range_of_motion = {}
+    
+    for post in video_posts:
+        total_duration += post.duration
+        
+        csv_path = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], post.author_id, post.id, 'pose_data.csv')
+        try:
+            pose_data = pd.read_csv(csv_path)
+            pos_body_counts = pos_body_counts.add(pose_data['pos_body'].value_counts(), fill_value=0)
+            
+            for col in pose_data.columns:
+                if col.startswith('a_') and not col.endswith('_diff'):
+                    min_angle = np.mean(pose_data[col])
+                    max_angle = np.max(pose_data[col])
+
+                    # Update global min and max
+                    if col not in range_of_motion:
+                        range_of_motion[col] = {'min': min_angle, 'max': max_angle}
+                    else:
+                        range_of_motion[col]['min'] = min(range_of_motion[col]['min'], min_angle)
+                        range_of_motion[col]['max'] = max(range_of_motion[col]['max'], max_angle)
+
+
+        except FileNotFoundError:
+            pass
+        
+    for report in video_reports:
+        total_spins += int(report.spin_count)
+        total_inversions += int(report.inversion_count)
+        
+        if report.detected_tricks:
+            for trick in report.detected_tricks.split(','):
+                total_tricks += 1
+                tricks_frequency[trick] = tricks_frequency.get(trick, 0) + 1
+    
+    fig_pos_body = px.pie(pos_body_counts, values=pos_body_counts, names=pos_body_counts.index, title="Body Classifications")
+    fig_body = json.dumps(fig_pos_body, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    tricks_df = pd.DataFrame(list(tricks_frequency.items()), columns=['Trick', 'Count'])
+    fig_pos_tricks = px.bar(tricks_df, x='Count', y='Trick', orientation='h', title="Frequency of Tricks")
+    fig_tricks = json.dumps(fig_pos_tricks, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    range_of_motion_df = pd.DataFrame.from_dict(range_of_motion, orient='index').reset_index()
+    range_of_motion_df.columns = ['Angle', 'Min', 'Max']
+    range_of_motion_df = range_of_motion_df.melt(id_vars=['Angle'], value_vars=['Min', 'Max'], var_name='Type', value_name='Value')
+
+    fig_total_rom = plot_range_of_motion_arc(range_of_motion_df)
+    fig_rom = json.dumps(fig_total_rom, cls=plotly.utils.PlotlyJSONEncoder)
+
+
+    return render_template("summary.html",
+                           video_posts=video_posts,
+                           video_reports=video_reports,
+                           pos_body_counts=pos_body_counts,
+                           total_duration=total_duration,
+                           total_tricks=total_tricks,
+                           tricks_frequency=tricks_frequency,
+                           total_spins=total_spins,
+                           total_inversions=total_inversions,
+                           fig_body=fig_body,
+                           fig_tricks=fig_tricks,
+                           fig_rom=fig_rom,
+                        
+                           title="My Dance Summary")
 
 @bp.route("/new", methods=["GET", "POST"])
 @login_required

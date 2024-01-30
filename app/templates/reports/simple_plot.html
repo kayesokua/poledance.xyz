@@ -1,8 +1,21 @@
 {% extends '_base.html' %}
 {% block content %}
-<h2 class="mt-5 text-start">
-    <a href="{{ url_for('reports.overview', id=video_post.id) }}" class="link-primary">{{ title }}</a>
-</h2>
+<div class="row text-start">
+
+    <p class="mt-5">
+      <a href="{{ url_for('reports.overview', id=video_post.id) }}"
+        class="badge align-items-center p-1 pe-2 text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle rounded-pill"
+        style="text-decoration: none;">
+        ⬅️ Back to Report Overview</a>
+    </p>
+    <h2 class="mb-3 text-start">
+        <a href="{{ url_for('reports.overview', id=video_post.id) }}" class="link-primary" style="text-decoration: none;">{{
+          title }}</a>
+      </h2>
+  
+
+  
+  <hr />
 <p class="text-start">{{ description }}</p>
 <div class="col-md-12">
   <div class="border">
