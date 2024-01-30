@@ -6,8 +6,6 @@ from PIL import Image
 from matplotlib.patches import FancyArrowPatch, Arc
 from .file_system_utils import parse_video_filename
 
-
-
 def visualize_pose_dimension_lengths(filepath, row, focus_heights):
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     
@@ -117,9 +115,6 @@ def visualize_pose_coordinates(filepath, row, focus_landmarks):
     plt.show()
     
 def visualize_video_frames_by_second(annotated_image_path_dir, data):
-    import os
-    import cv2
-    from matplotlib import pyplot as plt
 
     plt.rcParams.update({'font.size': 16})
     plt.rcParams['figure.constrained_layout.use'] = True
