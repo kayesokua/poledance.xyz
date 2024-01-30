@@ -24,7 +24,6 @@ import pytz
 bp = Blueprint("reports", __name__, url_prefix="/reports")
 tz = pytz.timezone('UTC')
 
-
 def process_pose_data(source_path, save_path, video_post, tricks, ref_body, ref_legs, ref_grip):
     with open(source_path, 'r') as file:
         pd_read = pd.read_csv(file)
@@ -74,10 +73,8 @@ def overview(id):
         tricks, ref_body, ref_legs, ref_grip = load_reference_data()
         pd_filepath = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data_raw.csv')
         pd_savepath = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data.csv')
-        pd_results = process_pose_data(pd_filepath, pd_savepath, video_post, tricks, ref_body, ref_legs, ref_grip)
-        
+        pd_results = process_pose_data(pd_filepath, pd_savepath, video_post, tricks, ref_body, ref_legs, ref_grip)        
         annotated_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'annotated')
-        processed_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'annotated')
         generate_timeline_image(annotated_dir, pd_results)
         
         if pd_results is None:
@@ -87,6 +84,10 @@ def overview(id):
             return redirect(url_for('reports.overview', id=video_post.id))
     else:
         video_report = VideoReport.query.filter_by(video_id=video_post.id, author_id=video_post.author_id).first()
+        
+        if video_post.report_id is None:
+            video_post.report_id = video_report.id
+            db.session.commit()
         
         if not video_report:
             flash("Report not found")
