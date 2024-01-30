@@ -1,4 +1,4 @@
-# poledance.xyz | Translating 💃 XYZ like 🔤
+# poledance.xyz | transforming your movement 💃 (x,y,z)'s like a-b-c!
 
 Poledance.xyz is an online platform designed for managing solo choreography in the field of pole fitness. It employs a data science framework to distill complex movements into simplified terms and generate reports that systematically codify a dance. The beta version features:
 
