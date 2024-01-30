@@ -78,8 +78,12 @@ def overview(id):
         
         annotated_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'annotated')
         processed_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'annotated')
-        generate_timeline_image(annotated_dir, pd_results)
         
+        timeline_image = generate_timeline_image(annotated_dir, pd_results)
+        
+        if timeline_image:
+            print("timeline image generated")
+            
         if pd_results is None:
             flash("Something went wrong")
             return redirect(url_for('diary.all_dance_entries'))
