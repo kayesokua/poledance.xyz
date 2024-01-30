@@ -7,9 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>poledance.xzy</title>
+    <title>poledance.xyz</title>
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
-    
+
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/cover/">
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -30,8 +30,6 @@
         }
     </style>
 
-
-    <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='css/cover.css') }}" rel="stylesheet">
 </head>
 
@@ -42,23 +40,26 @@
             <div>
                 <h3 class="float-md-start mb-0">poledance.xyz</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
-                    <a class="nav-link link-primary active" aria-current="page" href="{{ url_for('dictionary.pose_search') }}">Search</a>
+                    <a class="nav-link link-secondary" aria-current="page"
+                        href="{{ url_for('dictionary.pose_search') }}">Search Pose</a>
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-link link-secondary" href="{{ url_for('diary.all_dance_entries') }}">Diary</a>
+                    <a class="nav-link link-secondary" href="{{ url_for('accounts.sign_out') }}">Log Out</a>
+                    {% else %}
                     <a class="nav-link link-secondary" href="{{ url_for('accounts.sign_up') }}">Register</a>
                     <a class="nav-link link-secondary" href="{{ url_for('accounts.sign_in') }}">Login</a>
+                    {% endif %}
                 </nav>
             </div>
         </header>
 
         <main class="">
-            
+
             {% block content %}{% endblock %}
-            
+
         </main>
 
-        <footer class="mt-auto text-primary-50">
-            <p><a href="#" class="text-primary">Capstone Project and Research</a>, by <a
-                    href="https://github.com/kayesokua" class="text-primary">@kayesokua</a>.</p>
-        </footer>
+        {% include "_footer.html" %}
     </div>
 
     {{ moment.include_moment() }}

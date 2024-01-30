@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+{% block content %}
+<h2 class="mt-5 text-start">
+    <a href="{{ url_for('reports.overview', id=video_post.id) }}" class="link-primary">{{ title }}</a>
+</h2>
+<p class="text-start">{{ description }}</p>
+<div class="col-md-12">
+  <div class="border">
+      <div id="fig_render"></div>
+      <script>
+          var fig_render = {{ fig_render | safe }};
+          Plotly.newPlot('fig_render', fig_render);
+
+          function resizePlot() {
+                var graphContainer = document.getElementById('fig_render');
+                var width = graphContainer.offsetWidth; // Get the current width
+                var update = {
+                    height: width // Set height equal to width
+                };
+                Plotly.relayout('fig_render', update);
+            }
+            window.onload = resizePlot;
+            window.onresize = resizePlot;
+      </script>
+  </div>
+</div>
+{% endblock %}

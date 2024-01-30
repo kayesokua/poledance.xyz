@@ -1,41 +1,35 @@
 from flask import Blueprint, flash, redirect, render_template, current_app, request, url_for
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
 
-from app.extensions.db import db
-from app.models.video import VideoPost
 from app.utilities.video_utils import *
 from app.utilities.file_system_utils import *
 
 from app.extensions.plotly_pose_data import plotly_pose_figure
 from app.extensions.plotly_pose_contact_points import plotly_pose_contact_points
 
-from app.utilities.file_system_utils import clean_pose_name
-
-import pytz
-import uuid
-from werkzeug.utils import secure_filename
+import json
 import pandas as pd
 import plotly
-import json
+import pytz
+import random
 
 bp = Blueprint("dictionary", __name__, url_prefix="/dictionary")
 tz = pytz.timezone('UTC')
-
 
 @bp.route('/search', methods=['GET'])
 def pose_search():
     title = "Explore Pole Shapes"
     data = pd.read_csv(os.path.join('app', 'static', 'dictionary', 'tricks', 'pose_data.csv'))
     pose_names = data['pose_name'].unique()
-
     query = request.args.get('q', '')
+    total_poses = len(data)
     if query:
         filtered_data = data[data['pose_name'].str.contains(query, case=False, na=False)]
         results = filtered_data.to_dict(orient='records')
     else:
-        results = []
+        results = data.sample(n=5, random_state=random.randint(1, len(data))).to_dict(orient='records')
 
-    return render_template("dictionary.html", results=results, title=title, pose_names=pose_names)
+    return render_template("dictionary.html", results=results, title=title, pose_names=pose_names, total_poses=total_poses)
 
 @bp.route('/detail/<pose_name>', methods=['GET'])
 def pose_detail_page(pose_name):

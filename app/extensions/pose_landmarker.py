@@ -32,12 +32,14 @@ def generate_pose_landmark_dictionary(source_dir, model_path, is_video=False):
     else:
         pose_data, errors = batch_process_static_images(annotated_dir, filenames, landmarker)
     
+    total_errors = len(errors)
+   
     pose_data_df = pd.DataFrame(pose_data)
     pose_data_df.to_csv(f'{source_dir}/pose_data_raw.csv', index=False)
     
     errors = write_error_log(source_dir, errors)
     
-    return True
+    return True, total_errors
 
 def batch_process_video_images(annotated_dir, filenames, landmarker):
     pose_data = []

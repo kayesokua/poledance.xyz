@@ -1,6 +1,11 @@
 {% extends '_base.html' %}
 {% block content %}
-<p class="muted text-start mt-5"><a href="{{ url_for('dictionary.pose_search') }}" class="link-secondary">Back to search</a></p>
+<p class="mt-5 text-start">
+    <a href="{{ url_for('dictionary.pose_search') }}"
+      class="badge align-items-center p-1 pe-2 text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle rounded-pill"
+      style="text-decoration: none;">
+      🔍 Back to Search</a>
+  </p>
 
 <h1 class="text-start text-primary">{{ title }}</h1>
 <p class="text-start">Grasp the pole with one hand while leaning back and supporting your weight on the extended
