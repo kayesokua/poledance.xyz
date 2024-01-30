@@ -1,83 +1,113 @@
 {% extends '_base.html' %}
 {% block content %}
-<h2 class="mt-5 text-start">{{ title }}</h2>
-<p class="lead text-start mb-3">{{ video_post.description }}</p>
 
-<p>{{spin_count }} spins | {{ invert_count }} inversions | <a href="{{ url_for('reports.view_dance_report_timeline', id=video_post.id) }}">See Timeline</a></p>
-<hr class="py-3" />
 
-<div class="col-md-12">
-    <p class="lead text-center">Body Positions</p>
-    <div class="border">
-        <div id="fig_body_hbar"></div>
-        <script>
-            var fig_body_hbar = {{ fig_body_hbar | safe }};
-            Plotly.newPlot('fig_body_hbar', fig_body_hbar);
-        </script>
+<div class="row text-start">
+
+  <p class="mt-5">
+    <a href="{{ url_for('diary.all_dance_entries') }}"
+      class="badge align-items-center p-1 pe-2 text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle rounded-pill"
+      style="text-decoration: none;">
+      ⬅️ Back to Home</a>
+  </p>
+
+  <h2 class="mb-3 text-start">
+    <a href="{{ url_for('reports.overview', id=video_post.id) }}" class="link-primary" style="text-decoration: none;">{{
+      title }}</a>
+  </h2>
+  <p>{{ video_post.created_on.strftime('%B %d, %Y') }} | {{ video_post.duration | round(2) }} seconds | {{ video_report.spin_count
+    }} spins 🌀 |
+    {{video_report.inversion_count }}
+    inversions 🙃 </p>
+  <p> <a href="{{ url_for('reports.vis_animation', id=video_post.id) }}" class="btn btn-sm btn-outline-secondary">
+      View Animation
+    </a>
+
+    <a href="{{ url_for('reports.vis_range_of_motion', id=video_post.id) }}" class="btn btn-sm btn-outline-secondary">
+      View Range of Motion
+    </a>
+
+    <a href="{{ url_for('api.serve_uploaded_video', id=video_post.id, author_id=video_post.author_id ) }}"
+      class="btn btn-sm btn-outline-secondary">
+      View Reel
+    </a>
+    <a href="{{ url_for('diary.update_dance_entry', id=video_post.id) }}" class="btn btn-sm btn-outline-secondary">
+      Edit This Entry
+    </a>
+  </p>
+  <div class="col-12 mb-3">
+    <div style="overflow-x: auto; border: 1px solid #dee2e6;">
+        <img src="{{ url_for('api.serve_timeline_image', id=video_post.id, author_id=video_post.author_id ) }}" 
+             style="max-height: 250px; width: auto; display: block;"/>
     </div>
 </div>
+
+
+  <div class="col-md-12 mb-3">
+    <div style="overflow-y: scroll; border: 1px solid #dee2e6;">
+      <div id="fig_plot" style="width:1200px; height: 350px"></div>
+      <script>
+        var fig_plot = {{ fig_plot | safe }};
+        Plotly.newPlot('fig_plot', fig_plot);
+      </script>
+    </div>
+
+
+
+  </div>
+
+  <hr class="py-3" />
+  <div class="col-12">
+    <p class="mb-3"><b>About this Choreography</b></p>
+    <p class="lead text-start mb-3">
+      {{ video_post.description }}</p>
+
+
+  </div>
+
+</div>
+
+
+
+
+
 <hr class="py-3" />
 
-<div class="col-md-12">
-    <p class="lead text-center">Leg Positions</p>
-    <div class="border">
-      <div id="fig_legs_hbar"></div>
-      <script>
-        var fig_legs_hbar = {{ fig_legs_hbar | safe }};
-        Plotly.newPlot('fig_legs_hbar', fig_legs_hbar);
-      </script>
-    </div>
-  </div>
-  <hr class="py-3" />
+{% if video_report.detected_tricks %}
+<p class="text-start muted"><b>Most detected poses</b><br />
+  {% for trick in video_report.detected_tricks.split(',') %}
+  <a href="{{ url_for('dictionary.pose_search') }}?q={{ trick }}"
+    class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
+    {{ trick }}</a>
+  {% endfor %}
+</p>
+{% endif %}
 
-  <div class="col-md-12">
-    <p class="lead text-center">Grip Positions</p>
-    <div class="border">
-      <div id="fig_grip_hbar"></div>
-      <script>
-        var fig_grip_hbar = {{ fig_grip_hbar | safe }};
-        Plotly.newPlot('fig_grip_hbar', fig_grip_hbar);
-      </script>
-    </div>
-  </div>
-  <hr class="py-3" />
+{% if video_report.detected_grip %}
+<p class="text-start muted"><b>Most detected grip</b><br />
+  {% for grip in video_report.detected_grip.split(',') %}
+  <a href="{{ url_for('dictionary.pose_search') }}?q={{ grip }}"
+    class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
+    {{ grip }}</a>
+  {% endfor %}
+</p>
+{% endif %}
 
-  <div class="col-md-12">
-    <p class="lead text-center">Tricks</p>
-    <div class="border">
-      <div id="fig_tricks_hbar"></div>
-      <script>
-        var fig_tricks_hbar = {{ fig_tricks_hbar | safe }};
-        Plotly.newPlot('fig_tricks_hbar', fig_tricks_hbar);
-      </script>
-    </div>
-  </div>
-  <hr class="py-3" />
+{% if video_report.detected_legs %}
+<p class="text-start muted"><b>Most detected grip</b><br />
+  {% for legs in video_report.detected_legs.split(',') %}
+  <a href="{{ url_for('dictionary.pose_search') }}?q={{ legs }}"
+    class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
+    {{ legs }}</a>
+  {% endfor %}
+</p>
+{% endif %}
+<p class="text-start muted mb-5"><b>Export Your Pose Data</b><br />
 
-<p class="lead text-start">🍣 Your Raw Data | <a href="#">Export to csv</a></p>
-<div class="col-md-12 border my-3">
-    <div class="table-responsive small" style="max-height:200px; overflow-y: scroll;">
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    {% if pd_data %}
-                    {% for key in pd_data[0] %}
-                    <th>{{ key }}</th>
-                    {% endfor %}
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in pd_data %}
-                <tr>
+  <a href="{{ url_for('api.serve_pose_data', id=video_post.id, author_id=video_post.author_id ) }}"
+    class="badge align-items-center p-1 pe-2 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-pill">🍣
+    Click Here to Download Your Raw Data (.csv) </a>
+</p>
 
-                    {% for value in row.values() %}
-                    <td>{{ value }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
-    {% endblock %}
+{% endblock %}

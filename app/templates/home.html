@@ -1,49 +1,67 @@
 {% extends '_base.html' %}
 {% block content %}
-<h1>Welcome back! {{ current_user.username }}</h1>
-<p class="lead">
-  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-  <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-primary fw-bold text-white">Upload New
-    Dance</a>
-</p>
+<div class="row">
+  <div class="col">
+    <p class="lead mt-5 text-start">Hello, <b>{{ current_user.username }}</b>!</p>
+  </div>
+  <div class="col">
+    <p class="lead mt-5 text-end">
+      <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-sm btn-info fw-bold text-white">
+        {% include 'icons/upload.html' %} Upload New</a>
+      {% if video_posts %}
+      <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-sm btn-primary fw-bold text-white">
+        {% include 'icons/barchart.html' %} Dance Summary </a>
+      {% endif %}
+    </p>
+  </div>
 
-<div class="row mb-2">
+</div>
+
+<hr />
+
+<div class="row" style="min-height: 50vh;">
+  {% if video_posts %}
+
   {% for post in video_posts %}
-  <div class="col-md-12 mb-3">
-    <div class="card">
-      <div class="row text-start">
-        <div class="col-8">
-          <div class="">
-            <h6>{{ post.title }}</h6>
-            <p class="card-text mb-auto">{{ post.description }}</p>
-            <p class="card-text mb-auto">Deleted? {{ post.deleted }}</p>
-            <p class="card-text mb-auto">Annotated? {{ post.is_annotated }}</p>
-            <a href="{{ url_for('diary.update_dance_entry', id=post.id) }}">View Details</a>
-            <a href="{{ url_for('reports.view_dance_report', id=post.id) }}">View Report</a>
-          </div>
 
+  <style>
+    @media only screen and (min-width: 768px) {
+      .card {
+        width: 100%;
 
+      }
+    }
 
-        </div>
-        <div class="col-4">
-          <video controls class="img-fluid" style="padding:1em;">
-            <source src="{{ url_for('api.serve_uploaded_video', id=post.id, author_id=post.author_id ) }}"
-              type="video/mp4">
-            " type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
+    video {
+      opacity: 0.2;
+    }
+  </style>
+  <div class="col-4" style="max-height: 200px;">
+    <div class="card bg-dark">
+      <video src="{{ url_for('api.serve_uploaded_video', id=post.id, author_id=post.author_id ) }}" autoplay loop muted
+        class="img-fluid"></video>
+      <div class="card-img-overlay">
+        <h5 class="card-title lead text-start"><b><a href="{{ url_for('reports.overview', id=post.id) }}"
+              class="text-white">{{ post.title }}</a></b></h5>
+        
+
+        <p class="card-text text-white text-start"><small>{{ post.created_on.strftime('%B %d, %Y') }} | {{ post.duration
+            | round }}s</small></p>
+
+        <p class="text-start">
+          <a href="{{ url_for('diary.update_dance_entry', id=post.id) }}" class="btn btn-sm btn-light">
+            Edit This Entry
+          </a>
+        </p>
+
       </div>
     </div>
   </div>
-  {% else %}
-  <div class="col-md-12">
-    <p>No dance entries found.</p>
-  </div>
   {% endfor %}
-
-
-
+  {% else %}
+  <p class="lead text-start">0 entries found.</p>
+  {% endif %}
 </div>
+
 
 {% endblock %}
