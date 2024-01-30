@@ -1,0 +1,64 @@
+{% extends '_base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col">
+      <p class="lead mt-5 text-start">Hello, <b>{{ current_user.username }}</b>!</p>
+    </div>
+    <div class="col">
+      <p class="lead mt-5 text-end">
+        <a href="{{ url_for('diary.new_dance_entry') }}" class="btn btn-sm btn-info fw-bold text-white">
+          {% include 'icons/upload.html' %} Upload New</a>
+        {% if video_posts %}
+        <a href="{{ url_for('diary.all_dance_summary') }}" class="btn btn-sm btn-primary fw-bold text-white">
+          {% include 'icons/barchart.html' %} Dance Summary </a>
+        {% endif %}
+      </p>
+    </div>
+  
+  </div>
+  
+  <hr />
+
+<div class="row">
+    <div class="col-12">
+        <p class="lead mt-5 text-start"><b>{{ title }}</b> | {{ video_posts | length }} entries</p>
+    </div>
+    <div class="col-12">
+      {% for report in video_reports %}
+          {{report.spin_count}}
+        {% endfor %}
+        
+        {% if video_posts %}
+        <div class="table-responsive small">
+            <table class="table table-striped table-sm text-start" style="font-size: small;">
+                <thead>
+                    <tr>
+                        <th>Last Updated On</th>
+                        <th>Title</th>
+                        <th>Duration</th>
+                        <th>Reporting</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in video_posts %}
+                    <tr>
+                        <td>{{ post.last_updated_on }}</td>
+                        <td >{{ post.title | capitalize() }}</td>
+                        <td>{{ post.duration | round(2) }}</td>
+                        <td>
+                          <a href="{{ url_for('reports.overview', id=post.id) }}">View Report</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+
+    </div>
+</div>
+
+{% endblock %}
