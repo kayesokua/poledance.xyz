@@ -51,13 +51,13 @@ def sign_up():
             flash('Username or email already exists', 'error')
             return render_template("form.html", form=form, title="Sign Up")
         
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt).decode('utf-8')
+        #salt = bcrypt.gensalt()
+        #hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt).decode('utf-8')
 
         new_user = User(
             username=form.username.data,
             email=form.email.data,
-            password_hash=hashed_password)
+            password_hash=form.password.data)
         
         db.session.add(new_user)
         db.session.commit()
@@ -97,9 +97,9 @@ def profile():
                 user.scheduled_for_deletion_on = None
         
         if form.password.data and form.password.data == form.password2.data:
-            salt = bcrypt.gensalt()
-            hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt).decode('utf-8')
-            user.password_hash = hashed_password
+            #salt = bcrypt.gensalt()
+            #hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt).decode('utf-8')
+            user.password_hash = form.password.data
         db.session.commit()
         flash('Your account has been updated', 'success')
         return redirect(url_for('accounts.profile'))

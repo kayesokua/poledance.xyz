@@ -1,0 +1,71 @@
+{% extends '_base.html' %}
+{% block content %}
+<p class="mt-5 text-start">
+    <a href="{{ url_for('dictionary.pose_search') }}"
+        class="badge align-items-center p-1 pe-2 text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle rounded-pill"
+        style="text-decoration: none;">
+        🔍 Back to Search</a>
+</p>
+
+<h1 class="text-start text-primary">{{ title }}</h1>
+<p class="text-start">Grasp the pole with one hand while leaning back and supporting your weight on the extended
+    opposite arm, bringing one knee to your chest and resting your chin thoughtfully on your knee, reminiscent of
+    Rodin's 'The Thinker' statue.</p>
+<p class="text-start">
+
+    <a href="{{ url_for('dictionary.pose_detail_page', pose_name=title) }}" class="btn btn-sm btn-outline-secondary">
+        View Pole Shape Trends
+    </a>
+
+
+    <a href="javascript:void(0);" onclick="openImageWindow('{{ url_for('static', filename=image_filename) }}');"
+        class="btn btn-sm btn-outline-secondary">
+        View Original Image
+    </a>
+
+
+</p>
+
+
+<div class="col-md-12">
+    <div id="fig_plot" style="border: 2px solid silver; border-radius: 15px; overflow: hidden;">
+
+        <script>
+            var fig_plot = {{ fig_plot | safe }};
+            Plotly.newPlot('fig_plot', fig_plot);
+
+            function resizePlot() {
+                var graphContainer = document.getElementById('fig_plot');
+                var width = graphContainer.offsetWidth; // Get the current width
+                var update = {
+                    height: width // Set height equal to width
+                };
+                Plotly.relayout('fig_plot', update);
+            }
+
+            window.onload = resizePlot;
+            window.onresize = resizePlot;
+
+            function updatePlot() {
+                var queryParams = '?spine=' + document.getElementById('check_spine').checked;
+                queryParams += '&right_arm=' + document.getElementById('check_right_arm').checked;
+                queryParams += '&left_arm=' + document.getElementById('check_left_arm').checked;
+                queryParams += '&right_leg=' + document.getElementById('check_right_leg').checked;
+                queryParams += '&left_leg=' + document.getElementById('check_left_leg').checked;
+
+                var currentUrl = window.location.href;
+                var baseUrl = currentUrl.split('?')[0];  // Get the base URL without query parameters
+                window.location.href = baseUrl + queryParams;
+            }
+
+            function openImageWindow(imageUrl) {
+                window.open(imageUrl, 'newwindow', 'width=600,height=400');
+                return false;
+            }
+        </script>
+
+
+    </div>
+</div>
+
+{% endblock %}

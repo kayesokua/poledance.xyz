@@ -1,9 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash, abort
 from flask_login import LoginManager, current_user
 from flask_moment import Moment
-
+from flasgger import Swagger
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
+from flask_restx import Api
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from app.extensions.db import db, migrate
 
@@ -17,20 +19,19 @@ def create_app():
     bootstrap = Bootstrap(app)
     moment = Moment(app)
     
-
     with app.app_context():
         from app.models import User, VideoPost, VideoReport
         db.create_all()
         migrate.init_app(app, db, render_as_batch=True)
 
     
-    from app.api.routes import bp as api
+    from app.api.routes import bp as api_bp
     from app.accounts.routes import bp as accounts
     from app.diary.routes import bp as diary
     from app.reports.routes import bp as reports
     from app.dictionary.routes import bp as dictionary
     
-    app.register_blueprint(api)
+    app.register_blueprint(api_bp)
     app.register_blueprint(accounts)
     app.register_blueprint(diary)
     app.register_blueprint(reports)
@@ -52,6 +53,6 @@ def create_app():
         if current_user.is_authenticated:
             return redirect(url_for("diary.all_dance_entries"))
 
-        return render_template("/index.html", title="Cover")
+        return redirect(url_for("dictionary.pose_search"))
 
     return app

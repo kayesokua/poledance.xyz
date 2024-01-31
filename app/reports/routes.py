@@ -10,7 +10,7 @@ from app.models import VideoPost, VideoReport
 from app.services.pose_dimension_calculator import PoseDimensionCalculator
 from app.services.pose_spatial_classifier import PoseSpatialClassifier
 from app.services.pose_sequence_analyzer import PoseSequenceAnalyzer
-from app.services.timeline_visual import generate_timeline_image
+from app.extensions.generate_timeline_visual import generate_timeline_image
 from app.utilities.static_files import load_reference_data
 
 import os

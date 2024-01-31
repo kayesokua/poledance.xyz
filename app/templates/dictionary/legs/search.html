@@ -1,0 +1,77 @@
+{% extends '_base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <p class="lead mt-5 text-start"><b>{{ title }}</b> | {{ total_poses }} entries</p>
+    </div>
+    <div class="col-12">
+        <form method="GET" action="{{ url_for('dictionary.pose_legs_search') }}">
+            <div class="row">
+                <div class="col-8">
+                    <input class="form-control" type="search" list="datalistOptions" name="q" id="PoseSearch"
+                        placeholder="Hover to see options...">
+                    <datalist id="datalistOptions">
+                        {% for pose_name in pose_names %}
+                        <option value="{{ pose_name }}">
+
+                        </option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <div class="col-4">
+                    <button type="submit" class="btn w-100 btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<hr />
+
+<div class="row" style="min-height: 50vh;">
+
+    {% if results %}
+
+    <ol class="list-group list-group-numbered" style="--bs-gutter-x: 0!important;">
+        {% for row in results %}
+        <li class="list-group-item d-flex">
+            <div class="col-8 text-start">
+                <div class="fw-bold mb-2" style="padding-left:1em">
+                    <a href="{{ url_for('dictionary.pose_legs_detail_page', pose_name=row['pose_name']) }}"
+                        class="link-primary">
+                        {{row['pose_name'] }}</a>
+                </div>
+                <p style="padding-left: 1em">
+                   
+
+                    <a href="{{ url_for('dictionary.pose_legs_detail_contact_points', pose_name=row['pose_name']) }}"
+                        class="btn btn-sm btn-outline-secondary">View Contact Points</a>
+                    <a href="{{ url_for('dictionary.pose_legs_detail_page', pose_name=row['pose_name']) }}"
+                        class="btn btn-sm btn-outline-secondary">View Pose Shape</a>
+                   
+
+                   
+
+                </p>
+            </div>
+            <div class="col-4 text-end">
+                <img src="{{ url_for('static', filename='dictionary/positions/legs/' ~ row['image_filename']) }}"
+                class="img-fluid" style="max-height:75px;" />
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+
+
+
+    {% endif %}
+
+    <small class="mt-5 text-secondary">Credits: Images are sourced from <a
+            href="https://books.google.de/books/about/Pole_Dance_Fitness.html?id=G1UqtAEACAAJ&redir_esc=y"
+            class="text-secondary" target="_blank">Irina Kartaly's Pole Dance Fitness</a></small>
+
+</div>
+{% endblock %}

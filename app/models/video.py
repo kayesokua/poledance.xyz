@@ -39,8 +39,8 @@ class VideoPost(db.Model):
             report.deleted_on = datetime.utcnow()
             self.scheduled_for_deletion_on = datetime.utcnow() + timedelta(days=14)
         
-            db.session.add(self)
-            db.session.commit()
+        db.session.add(self)
+        db.session.commit()
         
     
     

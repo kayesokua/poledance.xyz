@@ -19,9 +19,9 @@ def plotly_visualize_timeline(data, timestamp, video_report, increment):
     
     color_map = {
         "None": "gray",
-        "front": "lightsteelblue",
+        "front": "gray",
         "back": "cornflowerblue",
-        "upright": "lightsteelblue",
+        "upright": "gray",
         "inversion": "cornflowerblue",
         "horizontal": "lightseagreen",
         "undefined":"gray",
@@ -73,4 +73,8 @@ def plotly_visualize_timeline(data, timestamp, video_report, increment):
     plot_df = pd.DataFrame(plot_data)
     fig_timeline = px.timeline(plot_df, x_start="Start", x_end="Finish", y="Category", color="Resource", labels={'Category': 'Type'},
                                color_discrete_map=color_map)
+    fig_timeline.update_layout(legend=dict(orientation='h'))
+
+
+
     return fig_timeline
