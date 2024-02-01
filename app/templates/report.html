@@ -86,7 +86,7 @@
 {% if video_report.detected_grip %}
 <p class="text-start muted"><b>Most detected grip</b><br />
   {% for grip in video_report.detected_grip.split(',') %}
-  <a href="{{ url_for('dictionary.pose_search') }}?q={{ grip }}"
+  <a href="{{ url_for('dictionary.pose_grip_search') }}?q={{ grip }}"
     class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
     {{ grip }}</a>
   {% endfor %}
@@ -96,7 +96,7 @@
 {% if video_report.detected_legs %}
 <p class="text-start muted"><b>Most detected grip</b><br />
   {% for legs in video_report.detected_legs.split(',') %}
-  <a href="{{ url_for('dictionary.pose_search') }}?q={{ legs }}"
+  <a href="{{ url_for('dictionary.pose_legs_search') }}?q={{ legs }}"
     class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
     {{ legs }}</a>
   {% endfor %}

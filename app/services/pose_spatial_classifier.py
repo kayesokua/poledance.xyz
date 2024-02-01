@@ -49,7 +49,7 @@ class PoseSpatialClassifier:
         closest_match_spec = min(scores, key=scores.get)
         closest_score = scores[closest_match_spec]
     
-        if closest_score > 200:
+        if closest_score > 180:
             return 'unknown'
         else:
             suffixes_to_remove = r'(-rgt|-lft|-inv|-rgt-inv|-lft-inv|-center|)$'
@@ -101,7 +101,7 @@ class PoseSpatialClassifier:
         closest_match_spec = min(scores, key=scores.get)
         closest_score = scores[closest_match_spec]
     
-        if closest_score > 200:
+        if closest_score > 180:
             return 'unknown'
         else:
             suffixes_to_remove = r'(-rgt|-lft|-inv|-rgt-inv|-lft-inv|-center|)$'
@@ -154,7 +154,7 @@ class PoseSpatialClassifier:
         closest_match_spec = min(scores, key=scores.get)
         closest_score = scores[closest_match_spec]
     
-        if closest_score > 200:
+        if closest_score > 180:
             return 'unknown'
         else:
             suffixes_to_remove = r'(-rgt|-lft|-inv|-rgt-inv|-lft-inv|-center|)$'
