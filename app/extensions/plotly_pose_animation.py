@@ -183,7 +183,7 @@ def plotly_dynamic_pose_figure(data, spine=True, right_arm=False, left_arm=False
                 {
                     "label": "Play",
                     "method": "animate",
-                    "args": [None, {"frame": {"duration": 300, "redraw": False}, "fromcurrent": True, "transition": {"duration": 300, "easing": "linear"}}]
+                    "args": [None, {"frame": {"duration": 300, "redraw": False}, "fromcurrent": True, "transition": {"duration": 0, "easing": "linear"}}]
                 },
                 {
                     "label": "Pause",

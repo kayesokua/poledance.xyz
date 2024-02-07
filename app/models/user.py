@@ -3,13 +3,14 @@ from app import db
 from datetime import datetime, timedelta
 from .video import VideoPost
 import uuid
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    password_hash = db.Column(db.String(128))
+    password_hash = db.Column(db.String(1000))
     activated = db.Column(db.Boolean, default=True)
     activated_on = db.Column(db.DateTime(), default=datetime.utcnow)
     last_login_on = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -19,6 +20,12 @@ class User(db.Model, UserMixin):
 
     def get_id(self):
         return str(self.id)
+    
+    def set_password(self, secret):
+        self.password = generate_password_hash(secret)
+
+    def check_password(self, secret):
+        return check_password_hash(self.password, secret)
     
     def delete_user(self):
         self.deleted = True

@@ -1,0 +1,125 @@
+{% extends '_base_checker.html' %}
+{% block content %}
+
+
+<div class="row text-start">
+
+    <p class="mt-5">
+        <a href="{{ url_for('diary.all_dance_entries') }}"
+            class="badge align-items-center p-1 pe-2 text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle rounded-pill"
+            style="text-decoration: none;">
+            ⬅️ Back to Home</a>
+    </p>
+
+    <h2 class="mb-3 text-start">
+        <a href="{{ url_for('reports.overview', id=video_post.id) }}" class="link-primary"
+            style="text-decoration: none;">{{
+            title }}</a>
+    </h2>
+    <p>{{ video_post.created_on.strftime('%B %d, %Y') }} | {{ video_post.duration | round(2) }} seconds | {{
+        video_report.spin_count
+        }} spins 🌀 |
+        {{video_report.inversion_count }}
+        inversions 🙃 </p>
+    <p> <a href="{{ url_for('reports.vis_animation', id=video_post.id) }}" class="btn btn-sm btn-outline-secondary">
+            View Animation
+        </a>
+
+        <a href="{{ url_for('reports.vis_range_of_motion', id=video_post.id) }}"
+            class="btn btn-sm btn-outline-secondary">
+            View Range of Motion
+        </a>
+
+        <a href="{{ url_for('api.serve_uploaded_video', id=video_post.id, author_id=video_post.author_id ) }}"
+            class="btn btn-sm btn-outline-secondary">
+            View Reel
+        </a>
+        <a href="{{ url_for('diary.update_dance_entry', id=video_post.id) }}" class="btn btn-sm btn-outline-secondary">
+            Edit This Entry
+        </a>
+    </p>
+   
+
+    <div class="col-md-12 my-3">
+        <div class="table-responsive small">
+            {% if pd_data %}
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+
+                        <th>#</th>
+                        <th>Image filename</th>
+                        <th>Body</th>
+                        <th>Face</th>
+                        <th>Legs</th>
+                        <th>Grip</th>
+                        <th>Trick</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for row in pd_data %}
+                    <tr>
+                        <td>{{ loop.index -1 }}</td>
+                        <td>
+                        <img src="{{ url_for('api.serve_annotated_frame_img', author_id=current_user.id, id=video_post.id, image_filename=row['image_filename']) }}" class="img-fluid">
+                            </td>
+                        <td>{{ row['pos_body'] }}</td>
+                        <td>{{ row['pos_face'] }}</td>
+                        <td><a href="{{ url_for('dictionary.pose_legs_search') }}?q={{ row['pos_legs'] }}"
+                                class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
+                                {{ row['pos_legs'] }}</a>
+                        </td>
+                        <td><a href="{{ url_for('dictionary.pose_grip_search') }}?q={{ row['pos_grip'] }}"
+                                class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
+                                {{ row['pos_grip'] }}</a>
+                        </td>
+
+                        <td>
+                            
+                    
+                            
+                            <a href="{{ url_for('dictionary.pose_search') }}?q={{ row['pos_trick'] }}"
+                                class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill" target="_blank">
+                                {{ row['pos_trick'] }}</a>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <hr class="py-3" />
+
+
+
+
+    {% if video_report.detected_legs %}
+    <p class="text-start muted"><b>Most detected grip</b><br />
+        {% for legs in video_report.detected_legs.split(',') %}
+        <a href="{{ url_for('dictionary.pose_legs_search') }}?q={{ legs }}"
+            class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
+            {{ legs }}</a>
+        {% endfor %}
+    </p>
+    {% endif %}
+    <p class="text-start muted mb-5"><b>Export Your Pose Data</b><br />
+
+        <a href="{{ url_for('api.serve_pose_data', id=video_post.id, author_id=video_post.author_id ) }}"
+            class="badge align-items-center p-1 pe-2 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-pill">🍣
+            Click Here to Download Your Raw Data (.csv) </a>
+    </p>
+
+
+    {% endblock %}

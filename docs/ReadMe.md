@@ -27,7 +27,7 @@ This diagram outlines the data flow specific to the management of static images,
 - MediaPipe (https://github.com/google/mediapipe)
 - Numpy(https://numpy.org/)
 - OpenCV (https://github.com/opencv/opencv)
-- Pandas (https://pandas.pydata.org/docs/index.html
+- Pandas (https://pandas.pydata.org/docs/index.html)
 
 ### Additional Resources
 

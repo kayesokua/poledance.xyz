@@ -50,6 +50,13 @@ def serve_timeline_image(author_id,id):
         filename = 'timeline.png'
         filepath = os.path.join(current_app.config['SERVE_PROCESSED_FOLDER'],author_id,id,'annotated')
         return send_from_directory(filepath,filename)
+    
+@bp.route('/processed/<author_id>/<id>/<image_filename>')
+@login_required
+def serve_annotated_frame_img(author_id,id, image_filename):
+    if current_user.is_authenticated and current_user.id == author_id:
+        filepath = os.path.join(current_app.config['SERVE_PROCESSED_FOLDER'],author_id,id,'annotated')
+        return send_from_directory(filepath,image_filename)
                
 
 @bp.route('/pdata/<author_id>/<id>')

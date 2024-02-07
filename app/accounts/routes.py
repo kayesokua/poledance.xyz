@@ -1,10 +1,12 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, session, request
 from flask_login import LoginManager, login_required, logout_user, current_user, login_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from app import db
 from app.models.user import User
 from .forms import SignInForm, SignUpForm, EditAccountForm
 import pytz
-import bcrypt
+
 from datetime import datetime
 
 bp = Blueprint("accounts", __name__, url_prefix="/accounts")
@@ -29,7 +31,7 @@ def sign_in():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password_hash.encode('utf-8')):
+        if user and check_password_hash(user.password_hash, form.password.data):
             user.last_login_on = tz.localize(datetime.utcnow())
             db.session.commit()
             login_user(user, remember=form.remember_me.data)
@@ -43,25 +45,21 @@ def sign_in():
 def sign_up():
     form = SignUpForm()
     if current_user.is_authenticated:
-        return redirect(url_for("accounts.profile"))
+        return redirect(url_for("diary.all_dance_entries"))
 
     if form.validate_on_submit():
         user = User.query.filter((User.username == form.username.data) | (User.email == form.email.data)).first()
         if user:
+            print("user exists!")
             flash('Username or email already exists', 'error')
             return render_template("form.html", form=form, title="Sign Up")
-        
-        #salt = bcrypt.gensalt()
-        #hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt).decode('utf-8')
-
+        hashed_password = generate_password_hash(form.password.data)
         new_user = User(
             username=form.username.data,
             email=form.email.data,
-            password_hash=form.password.data)
-        
+            password_hash=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-
         login_user(new_user)
 
         flash('Registration successful', 'success')

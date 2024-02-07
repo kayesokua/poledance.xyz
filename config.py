@@ -26,7 +26,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI_DEV')
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     WTF_CSRF_ENABLED = True
     
 class ProductionConfig(Config):

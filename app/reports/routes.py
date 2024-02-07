@@ -135,6 +135,59 @@ def generate_charts(pd_results, duration):
     }
 
 
+@bp.route("/<id>/checker", methods=["GET", "POST"])
+@login_required
+def report_checker(id):
+    video_post = VideoPost.query.get_or_404(id)
+    if not video_post.is_calculated:
+        tricks, ref_body, ref_legs, ref_grip = load_reference_data()
+        pd_filepath = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data_raw.csv')
+        pd_savepath = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data.csv')
+        pd_results = process_pose_data(pd_filepath, pd_savepath, video_post, tricks, ref_body, ref_legs, ref_grip)        
+        annotated_dir = os.path.join(current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'annotated')
+        generate_timeline_image(annotated_dir, pd_results)        
+        timeline_image = generate_timeline_image(annotated_dir, pd_results)
+        
+        if timeline_image:
+            print("timeline image generated")
+            
+        if pd_results is None:
+            flash("Something went wrong")
+            return redirect(url_for('diary.all_dance_entries'))
+        else:
+            return redirect(url_for('reports.overview', id=video_post.id))
+    else:
+        video_report = VideoReport.query.filter_by(video_id=video_post.id, author_id=video_post.author_id).first()
+        
+        if video_post.report_id is None:
+            video_post.report_id = video_report.id
+            db.session.commit()
+        
+        if not video_report:
+            flash("Report not found")
+            return redirect(url_for('diary.all_dance_entries'))
+
+        pd_filepath = os.path.join(
+            current_app.config['FRAME_OUTPUT_FOLDER'], video_post.author_id, video_post.id, 'pose_data.csv')
+        with open(pd_filepath, 'r') as file:
+            pd_results = pd.read_csv(file)
+        
+        filter = pd_results[['image_filename','secs','frame_no','pos_face','pos_body','pos_legs','pos_grip','pos_trick']]
+        pd_data = filter.to_dict(orient='records')
+        
+    fig_timeline = plotly_visualize_timeline(pd_results, video_report.created_on, video_report, 0.12)
+    fig_plot = json.dumps(fig_timeline, cls=plotly.utils.PlotlyJSONEncoder)
+
+    
+
+    return render_template("reports/checker.html", title=f"{video_post.title}",
+                           video_post=video_post,
+                           pd_data=pd_data,
+                           video_report=video_report,
+                           fig_plot=fig_plot,
+                           pd_filepath=pd_filepath,
+                           )
+
 @bp.route("/<id>/animation", methods=["GET", "POST"])
 @login_required
 def vis_animation(id):

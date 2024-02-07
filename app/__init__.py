@@ -1,29 +1,24 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash, abort
+from flask import Flask, redirect, url_for, request, session, flash, abort
 from flask_login import LoginManager, current_user
 from flask_moment import Moment
-from flasgger import Swagger
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
-from flask_restx import Api
-from flask_swagger_ui import get_swaggerui_blueprint
 
 from app.extensions.db import db, migrate
-
 
 def create_app():
 
     app = Flask(__name__)
     app.config.from_object('config.DevelopmentConfig')
-    db.init_app(app)
     csrf = CSRFProtect(app)
     bootstrap = Bootstrap(app)
     moment = Moment(app)
     
+    db.init_app(app)
+    migrate.init_app(app, db, render_as_batch=True)
+    
     with app.app_context():
         from app.models import User, VideoPost, VideoReport
-        db.create_all()
-        migrate.init_app(app, db, render_as_batch=True)
-
     
     from app.api.routes import bp as api_bp
     from app.accounts.routes import bp as accounts
