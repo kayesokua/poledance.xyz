@@ -27,6 +27,10 @@
       View Range of Motion
     </a>
 
+    <a href="{{ url_for('reports.report_checker', id=video_post.id) }}" class="btn btn-sm btn-outline-secondary">
+      Checker
+    </a>
+
     <a href="{{ url_for('api.serve_uploaded_video', id=video_post.id, author_id=video_post.author_id ) }}"
       class="btn btn-sm btn-outline-secondary">
       View Reel

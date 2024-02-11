@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import re
 
 class PoseSequenceAnalyzer:
@@ -32,28 +30,24 @@ class PoseSequenceAnalyzer:
         return inversion_count
         
     def get_pole_trick(self, row):
-
+        columns = self.data.columns
+        l_cols = [col for col in columns if col.endswith('_x') or col.endswith('_y')]
+        d_cols = sorted([col for col in self.data.columns if col.startswith('d_')]) 
         a_cols = sorted([col for col in self.data.columns if col.startswith('a_')])
         scores = {}
         for _, ref_row in self.ref_tricks.iterrows():
-            score = 0
+            a_score = sum(1 for col in a_cols if abs(row[col] - ref_row[col]) < 35)
+            d_score = sum(1 for col in d_cols if abs(row[col] - ref_row[col]) < 0.25)
+            l_score = sum(1 for col in l_cols if abs(row[col] - ref_row[col]) < 0.2)
+            total_score = a_score + d_score + l_score
+            scores[ref_row['pose_name']] = total_score
             
-            for col in a_cols:
-                threshold = 15
-                difference = abs(row[col] - ref_row[col])
-                if difference <= threshold:
-                    score += 1
-            
-            scores[ref_row['pose_name']] = score
-        
-        closest_match_spec = max(scores, key=scores.get)
-        highest_score = scores[closest_match_spec]
-        
-        if highest_score <= 5:
-            self.trick_undefined_count += 1
-            return "undefined"
+        max_score_pose = max(scores, key=scores.get)
+        max_score = scores[max_score_pose]
+
+        if max_score < 20:
+            return 'None'
         else:
-            self.trick_match_count += 1
             suffixes_to_remove = r'(-rgt|-lft|-inv|-rgt-inv|-lft-inv|-center|)$'
-            closest_match = re.sub(suffixes_to_remove, '', closest_match_spec)
+            closest_match = re.sub(suffixes_to_remove, '', max_score_pose)
             return closest_match

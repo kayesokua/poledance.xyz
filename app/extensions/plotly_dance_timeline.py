@@ -30,14 +30,13 @@ def plotly_visualize_timeline(data, timestamp, video_report, increment):
     plot_data = []
     for i in range(len(combined) - 1):
         current_trick = combined.iloc[i]['pos_trick']
-        trick_resource = current_trick if current_trick in detected_tricks else "None"
+        trick_resource = str(current_trick) if str(current_trick) in detected_tricks else "None"
         
         current_legs = combined.iloc[i]['pos_legs']
-        legs_resource = current_legs if current_legs in detected_legs else "None"
+        legs_resource = str(current_legs) if str(current_legs) in detected_legs else "None"
         
         current_grip = combined.iloc[i]['pos_grip']
-        grip_resource = current_grip if current_grip in detected_grip else "None"
-
+        grip_resource = str(current_grip) if str(current_grip) in detected_grip else "None"
         
         plot_data.append({
             'Category': 'Body Position',

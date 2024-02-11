@@ -3,6 +3,7 @@ from flask_login import LoginManager, current_user
 from flask_moment import Moment
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
+from sqlalchemy import inspect
 
 from app.extensions.db import db, migrate
 
@@ -13,12 +14,11 @@ def create_app():
     csrf = CSRFProtect(app)
     bootstrap = Bootstrap(app)
     moment = Moment(app)
-    
     db.init_app(app)
-    migrate.init_app(app, db, render_as_batch=True)
-    
     with app.app_context():
         from app.models import User, VideoPost, VideoReport
+        db.create_all()
+        migrate.init_app(app, db, compare_type=True)
     
     from app.api.routes import bp as api_bp
     from app.accounts.routes import bp as accounts

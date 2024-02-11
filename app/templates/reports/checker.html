@@ -97,29 +97,4 @@
     </div>
 
 
-
-
-
-    <hr class="py-3" />
-
-
-
-
-    {% if video_report.detected_legs %}
-    <p class="text-start muted"><b>Most detected grip</b><br />
-        {% for legs in video_report.detected_legs.split(',') %}
-        <a href="{{ url_for('dictionary.pose_legs_search') }}?q={{ legs }}"
-            class="badge align-items-center p-1 pe-2 text-info-emphasis bg-info-subtle border border-info-subtle rounded-pill">
-            {{ legs }}</a>
-        {% endfor %}
-    </p>
-    {% endif %}
-    <p class="text-start muted mb-5"><b>Export Your Pose Data</b><br />
-
-        <a href="{{ url_for('api.serve_pose_data', id=video_post.id, author_id=video_post.author_id ) }}"
-            class="badge align-items-center p-1 pe-2 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-pill">🍣
-            Click Here to Download Your Raw Data (.csv) </a>
-    </p>
-
-
     {% endblock %}
